@@ -1,30 +1,26 @@
 # AI-Powered WooCommerce Shopping Assistant (n8n + OpenAI)
 
-This repository contains an n8n workflow that turns your WooCommerce store into an **AI-powered shopping assistant**.
+This repository contains an **n8n automation workflow** that turns any WooCommerce store into an **AI-powered shopping assistant**.  
+It uses OpenAI, WooCommerce REST API, and n8n's AI Agent node to understand customer queries and respond with real product data.
 
-The workflow connects:
-
-- A chat entry point (webhook-based chat trigger)
-- An AI Agent powered by OpenAI
-- A short-term memory component
-- A WooCommerce tool that fetches products in real time
-
-Customers can ask natural-language questions like:
+With this workflow, customers can ask natural-language questions like:
 
 > "Do you have black sneakers in size 42?"  
 > "What are your cheapest phones under 100k?"  
+> "Show me your latest laptops under ₦300k."
 
-and the AI will use your **live WooCommerce catalogue** to answer.
+The AI agent will read your **live WooCommerce catalogue**, fetch product information, and respond instantly with intelligent answers.
 
 ---
 
 ## ✨ Features
 
-- 🧠 **AI Agent** – Handles user intent and generates natural replies.
-- 🛒 **WooCommerce integration** – Uses your real products (name, price, etc.).
-- 💬 **Chat trigger** – Can be connected to a website chat, API, or any frontend.
-- 🧩 **Composable** – You can extend it with more tools (orders, carts, recommendations).
-- 🧱 **Prompt-architecture friendly** – Great starting point for AI engineering & automation experiments.
+- 🧠 **AI Agent** – Handles user intent and generates natural replies.  
+- 🛒 **WooCommerce integration** – Reads real-time product data from your store.  
+- 💬 **Chat trigger** – Works with any chat UI, webhook, API, or front-end.  
+- 🧩 **Composable design** – Extend with more agents or tools (orders, carts, upsells).  
+- 🔁 **Memory Engine** – Maintains short-term conversation memory.  
+- ⚡ **Automation-ready** – Ideal for AI engineering, prompt architecture, and workflow automation projects.
 
 ---
 
@@ -32,22 +28,25 @@ and the AI will use your **live WooCommerce catalogue** to answer.
 
 You’ll need:
 
-1. **n8n** (self-hosted or n8n Cloud)  
+1. **An n8n instance** (self-hosted or n8n Cloud)  
 2. **OpenAI account & API key**  
-3. **WooCommerce store** with REST API enabled  
-4. **n8n credentials** for:
-   - OpenAI (`OpenAI API` credential)
-   - WooCommerce (`WooCommerce API` credential)
+3. **A WooCommerce store** with REST API enabled  
+4. **Two credentials in n8n**:  
+   - `OpenAI API`  
+   - `WooCommerce API`  
 
-> 🔐 **No secrets are included in this repo.**  
-> You MUST configure your own credentials in your n8n instance.
+> 🔐 **Important:**  
+> No API keys, secrets, or credentials are included in this repository.  
+> You must configure these in your own n8n environment.
 
 ---
 
-## 📁 Files
+## 📁 Repository Contents
 
-- `workflow.json` – The n8n workflow you can import.
-- `README.md` – This file.
+| File | Description |
+|------|-------------|
+| `workflow.json` | The exported n8n workflow (clean, sanitized, ready to import) |
+| `README.md` | Full setup and usage documentation |
 
 ---
 
@@ -55,61 +54,61 @@ You’ll need:
 
 ### 1. Install or access n8n
 
-You can use:
+Use either:
 
-- **n8n Cloud**, or  
-- Self-hosted n8n (Docker, Node, etc.)
+- **n8n Cloud** (recommended for beginners)  
+- **Self-hosted n8n** (Docker, PM2, or Node)
 
-Follow the official n8n docs for installation if you don’t have an instance yet.
-
----
-
-### 2. Create your credentials in n8n
-
-#### a) OpenAI credential
-
-1. In n8n, go to **Settings → API Credentials** (or Credentials in the left menu).
-2. Create a new **OpenAI API** credential.
-3. Paste your **OpenAI API key**.
-4. Save it and remember the **name** you used (e.g. `OpenAI - Main`).
-
-#### b) WooCommerce credential
-
-1. In WooCommerce, go to **WooCommerce → Settings → Advanced → REST API**.  
-2. Create a new API key with **Read** permissions (or more if you plan to extend this).
-3. Copy the **Consumer Key** and **Consumer Secret**.
-4. In n8n, create a new **WooCommerce API** credential and:
-   - Set your **store URL** (e.g. `https://yourstore.com`)
-   - Paste the consumer key & secret
-5. Save and remember the **credential name**.
-
-> ⚠️ Never commit your API keys or credentials to GitHub.
+Official installation guide:  
+https://docs.n8n.io/hosting/
 
 ---
 
-### 3. Import the workflow
+## 2. Create Credentials in n8n
 
-1. Download `workflow.json` from this repo.
-2. In n8n, go to **Workflows → Import from File**.
-3. Select `workflow.json` and import it.
-4. Open the workflow.
+### a) OpenAI Credential
+
+1. In n8n, go to **Credentials**  
+2. Create a new credential of type **OpenAI API**  
+3. Add your **OpenAI API Key**  
+4. Save and note the credential name  
+
+### b) WooCommerce Credential
+
+1. In WordPress, go to:  
+   **WooCommerce → Settings → Advanced → REST API**  
+2. Create a new key with **Read** permission  
+3. Copy the **Consumer Key** and **Consumer Secret**  
+4. In n8n, create a **WooCommerce API** credential:  
+   - Add your **Store URL**  
+   - Add the Consumer Key  
+   - Add the Consumer Secret  
+5. Save and note the credential name  
+
+> ⚠️ Never upload API keys to GitHub or expose them publicly.
 
 ---
 
-### 4. Attach your credentials inside the workflow
+## 3. Import the Workflow into n8n
 
-Because credentials are instance-specific, the JSON uses placeholders:
+1. Download `workflow.json` from this repository  
+2. In n8n:  
+   **Workflows → Import from File**  
+3. Select the JSON file and import  
+4. Open the workflow  
+
+---
+
+## 4. Attach Your Credentials
+
+The JSON includes credential placeholders such as:
 
 ```json
 "openAiApi": {
   "id": "REPLACE_WITH_YOUR_OPENAI_CREDENTIAL_ID_IN_N8N",
   "name": "REPLACE_WITH_YOUR_OPENAI_CREDENTIAL_NAME_IN_N8N"
-}
-
-
+},
 "wooCommerceApi": {
   "id": "REPLACE_WITH_YOUR_WOOCOMMERCE_CREDENTIAL_ID_IN_N8N",
   "name": "REPLACE_WITH_YOUR_WOOCOMMERCE_CREDENTIAL_NAME_IN_N8N"
 }
-
-
